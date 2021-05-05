@@ -1,0 +1,52 @@
+#window{
+    background-color:cyan;
+}
+
+main{
+    margin: 0 auto;
+    width: 30em;
+}
+
+#display{
+    display: flex;
+    flex-direction: row;
+}
+#clear{
+    width: 23%;
+}
+#window{
+    border: black solid 1px;
+    width: 75%
+}
+
+#buttons{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+button{
+    font-size: 4em;
+
+}
+#numbers{
+    display:inline-block;
+    width:69%;
+}
+#numbers > button{
+    width: 32%;
+}
+
+#operators{
+    width: 29%;
+}
+
+#operators > div{
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+
+}
+
+
