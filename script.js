@@ -1,105 +1,121 @@
-const windowDOM = document.getElementById('window');
+const numberDisplay = document.getElementById('number-display');
 let currentValue = "0";
 let previousValue = "0";
 let currentOperator = "none";
-windowDOM.innerHTML = currentValue;
+numberDisplay.textContent = currentValue;
 
-//Helper Function
-function solveIt(operator){
+window.addEventListener('click', function (event) {
 
-    if (operator === "divide"){
-        currentValue = parseInt(previousValue) / parseInt(currentValue);
-    }
-    if (operator === "multiply"){
-        currentValue = parseInt(previousValue) * parseInt(currentValue)
-    }
-    if (operator === "subtract"){
-        currentValue = parseInt(previousValue) - parseInt(currentValue)
-    }
-    if (operator === "add"){
-        currentValue = parseInt(previousValue) + parseInt(currentValue)
+    if (isPressed('#clear', event)) {
+        handleClearPress();
     }
 
-    //display decimals to the thousandth(0.001)
-    currentValue = Math.round(currentValue * 1000) / 1000
-    //if number too big or too small to display, show ERROR
-    if(currentValue > 9999999999 || currentValue < 0.00000001){
-        currentValue="ERROR";
+    if (isPressed('.number', event)) {
+        if (currentValue.length === 10) return;
+        handleNumberPress(event)
     }
-    //reset values to proceed with more calculations
-    currentOperator="none";
-    previousValue="0";
+
+    if (isPressed('#decimal', event)) {
+        handleDecimalPress();
+    }
+
+    if (isPressed('.operator', event)) {
+        handleOperatorPress(event.target.value);
+    }
+
+    if (isPressed('#equals', event)) {
+        calculate(currentOperator);
+    }
+
+    numberDisplay.textContent = currentValue;
+})
+
+//Helper Functions
+function isPressed(type, event) {
+    return event.target.matches(type);
+}
+
+function handleNumberPress(event) {
+    if (currentOperator === "none" && previousValue === "0") {
+        setFirstNumber(event);
+    }
+
+    if (currentOperator !== "none") {
+        setSecondNumber(event);
+    }
 }
 
 
-window.addEventListener('click', function(event){
-
-    //IF reset button pressed
-    if(event.target.matches('#clear')){
-        currentValue = "0";
-        previousValue  = "0";
-        currentOperator = "none";
-    }
-    //IF a number is pressed
-    if(event.target.matches('.number')){
-        //IF writing first value
-        if(currentOperator == "none" && previousValue== "0"){
-            //Display no more than 10 digits on the screen
-            if(currentValue.length < 10){
-                //IF value is zero, Prevent Leading Zeroes
-                if(currentValue === "0"){
-                    currentValue = event.target.value;
-                } 
-                //ELSE concat the number
-                else{
-                    currentValue = currentValue.concat(event.target.value);
-                }
-            }
-        }
-        //IF an operator has been selected
-        if(currentOperator !== "none"){
-            //IF first digit of new value, save initial value, then display new value
-            if(previousValue == "0"){
-                previousValue = currentValue
-                currentValue = event.target.value;
-            }
-            //ELSE concat digit to new value
-            else{
-                currentValue = currentValue.concat(event.target.value);
-            }
-        }
-
-    }
-    //IF the decimal is pressed
-    if(event.target.matches('#decimal')){
-        //prevent additional decimals
-        if(!currentValue.includes(".")){
-            currentValue = currentValue.concat(event.target.value)
-        }
-    }
-    //IF operator selected
-    if(event.target.matches('.operator')){
-        //IF FIRST TIME USING OPERATOR
-        if(currentOperator === "none"){
-            currentOperator = event.target.value //define operation
-            return event.preventDefault() //prevent next step due to defined operation
-        }
-        //IF NOT FIRST TIME USING OPERATOR
-        if(currentOperator !== "none"){
-            solveIt(currentOperator) //execute previous operator
-            currentOperator = event.target.value; //queue operator for next calculation
-        }
-
-    }
-    //IF solve button pressed 
-    if(event.target.matches('#equals')){
-        solveIt(currentOperator);
+function setSecondNumber(event) {
+    if (previousValue === "0") {
+        previousValue = currentValue
+        currentValue = event.target.value;
     }
 
-    event.preventDefault() //prevent window from reloading on button press
-    windowDOM.innerHTML = currentValue; //write to DOM value/calculation
+    else {
+        currentValue += event.target.value;
+    }
+}
 
-})
+function setFirstNumber(event) {
+    if (currentValue === "0") {
+        currentValue = event.target.value;
+    } else {
+        currentValue += event.target.value;
+    }
+}
 
+function handleClearPress() {
+    currentValue = "0";
+    previousValue = "0";
+    currentOperator = "none";
+}
 
+function handleDecimalPress() {
+    if (!currentValue.includes(".")) {
+        currentValue += '.'
+    }
+}
 
+function handleOperatorPress(operator) {
+    if (currentOperator === "none") {
+        currentOperator = operator; //define operation
+        return;
+    }
+
+    if (currentOperator !== "none") {
+        calculate(currentOperator)
+        currentOperator = operator;
+    }
+}
+
+function calculate(operator) {
+
+    if (operator === "divide") {
+        currentValue = parseFloat(previousValue) / parseFloat(currentValue);
+    }
+    if (operator === "multiply") {
+        currentValue = parseFloat(previousValue) * parseFloat(currentValue)
+    }
+    if (operator === "subtract") {
+        currentValue = parseFloat(previousValue) - parseFloat(currentValue)
+    }
+    if (operator === "add") {
+        currentValue = parseFloat(previousValue) + parseFloat(currentValue)
+    }
+
+    currentValue = fixFloats(currentValue)
+    resetCalculator();
+}
+
+function fixFloats(num) {
+    if (num > 9999999999 || num < 0.00000001) {
+        return "ERROR";
+    }
+    return Math.round(num * 1000) / 1000;
+}
+
+function resetCalculator() {
+    currentOperator = "none";
+    previousValue = "0";
+}

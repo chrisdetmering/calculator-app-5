@@ -1,62 +1,60 @@
-#window{
-    background-color:cyan;
-}
 
-main{
+main {
     margin: 0 auto;
     width: 30em;
 }
 
-#display{
+#display {
     display: flex;
     flex-direction: row;
 }
-#clear{
+#clear {
     width: 23%;
 }
-#window{
+
+#number-display {
     border: black solid 1px;
     width: 75%;
     font-size: 4em;
     text-align: right;
+    background-color:cyan;
 }
 
-#buttons{
+#buttons {
     display: flex;
     flex-direction: row;
     width: 100%;
     margin: 0 auto;
     text-align: center;
 }
-button{
-    font-size: 4em;
 
+button {
+    font-size: 4em;
 }
-#numbers{
+
+#numbers {
     display:inline-block;
     width:69%;
 }
-#numbers > button{
+
+#numbers > button { 
     width: 32%;
 }
 
-#operators{
+#operators {
     width: 29%;
 }
 
-#operators > div{
+#operators > div {
     display:flex;
     flex-direction: column;
     text-align: center;
-
 }
 
-#clear{
-    background-color:rgb(223, 114, 114)
+#clear {
+    background-color:rgb(223, 114, 114);
 }
 
-.operator, #equals{
+.operator, #equals {
     background-color: rgb(65, 223, 65);
 }
-
-
