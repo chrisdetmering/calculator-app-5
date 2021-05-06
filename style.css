@@ -51,4 +51,12 @@ button{
 
 }
 
+#clear{
+    background-color:rgb(223, 114, 114)
+}
+
+.operator, #equals{
+    background-color: rgb(65, 223, 65);
+}
+
 
