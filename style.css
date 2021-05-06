@@ -16,7 +16,9 @@ main{
 }
 #window{
     border: black solid 1px;
-    width: 75%
+    width: 75%;
+    font-size: 4em;
+    text-align: right;
 }
 
 #buttons{
